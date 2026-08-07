@@ -2,7 +2,7 @@
                 API CONFIGURATION
 ================================================= */
 // Replace with your live Vercel domain URL
-const API_URL = "https://your-vercel-project.vercel.app/api/history-data";
+const API_URL = "https://aqms-dashboard-w49a.vercel.app/api/live-data";
 
 // Storage for fetched Google Sheet records
 let historyData = [];
