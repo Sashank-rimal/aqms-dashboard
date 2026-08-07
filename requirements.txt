@@ -1,1 +1,2 @@
-google-api-python-client google-auth
+google-api-python-client==2.108.0
+google-auth==2.23.3
