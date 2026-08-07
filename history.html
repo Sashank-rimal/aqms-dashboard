@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>AQMS - History</title>
+
+
+<!-- Google Fonts -->
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+<!-- CSS -->
+
+<link rel="stylesheet"
+      href="history.css">
+```
+
+</head>
+
+<body>
+
+```
+<!-- =================================
+        BACKGROUND DECORATION
+================================== -->
+
+<div class="bg-circle circle-one"></div>
+
+<div class="bg-circle circle-two"></div>
+
+
+<!-- =================================
+                HEADER
+================================== -->
+
+<header class="main-header">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+
+        <h1>
+
+            AQMS
+
+        </h1>
+
+
+        <p>
+
+            Air Quality Monitoring System
+
+        </p>
+
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="navigation">
+
+
+        <a href="index.html">
+
+            Dashboard
+
+        </a>
+
+
+        <a href="history.html"
+           class="active">
+
+            History
+
+        </a>
+
+
+    </nav>
+
+
+    <!-- LIVE STATUS -->
+
+    <div class="live-status">
+
+
+        <span class="live-dot"></span>
+
+
+        <span>
+
+            LIVE
+
+        </span>
+
+
+    </div>
+
+
+</header>
+
+
+<!-- =================================
+            HISTORY CONTENT
+================================== -->
+
+<main class="history-container">
+
+
+    <!-- =================================
+            HISTORY HEADER
+    ================================== -->
+
+    <section class="history-header">
+
+
+        <div>
+
+
+            <h2>
+
+                Sensor History
+
+            </h2>
+
+
+            <p>
+
+                Explore previously recorded sensor readings
+
+            </p>
+
+
+        </div>
+
+
+        <button id="exportButton"
+                class="export-button">
+
+
+            <i class="fa-solid fa-download"></i>
+
+
+            Export CSV
+
+
+        </button>
+
+
+    </section>
+
+
+    <!-- =================================
+            FILTER CONTROLS
+    ================================== -->
+
+    <section class="history-controls">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+
+            <input
+
+                type="text"
+
+                id="searchInput"
+
+                placeholder="Search readings..."
+
+            >
+
+
+        </div>
+
+
+        <!-- DATE RANGE -->
+
+        <select id="dateRange">
+
+
+            <option value="all">
+
+                All Records
+
+            </option>
+
+
+            <option value="today">
+
+                Today
+
+            </option>
+
+
+            <option value="yesterday">
+
+                Yesterday
+
+            </option>
+
+
+            <option value="last7days">
+
+                Last 7 Days
+
+            </option>
+
+
+            <option value="last30days">
+
+                Last 30 Days
+
+            </option>
+
+
+            <option value="lastyear">
+
+                Last Year
+
+            </option>
+
+
+        </select>
+
+
+        <!-- STATUS FILTER -->
+
+        <select id="statusFilter">
+
+
+            <option value="all">
+
+                All Status
+
+            </option>
+
+
+            <option value="good">
+
+                Good
+
+            </option>
+
+
+            <option value="moderate">
+
+                Moderate
+
+            </option>
+
+
+            <option value="poor">
+
+                Poor
+
+            </option>
+
+
+        </select>
+
+
+    </section>
+
+
+    <!-- =================================
+            SELECTED RANGE
+    ================================== -->
+
+    <div class="selected-range">
+
+
+        <i class="fa-regular fa-calendar"></i>
+
+
+        <span id="selectedRangeText">
+
+            All Recorded Readings
+
+        </span>
+
+
+    </div>
+
+
+    <!-- =================================
+            HISTORY TABLE
+    ================================== -->
+
+    <section class="history-card">
+
+
+        <div class="table-wrapper">
+
+
+            <table>
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th>
+
+                            Date
+
+                        </th>
+
+
+                        <th>
+
+                            Time
+
+                        </th>
+
+
+                        <th>
+
+                            MQ-2
+
+                        </th>
+
+
+                        <th>
+
+                            MQ-135
+
+                        </th>
+
+
+                        <th>
+
+                            Temperature
+
+                        </th>
+
+
+                        <th>
+
+                            Humidity
+
+                        </th>
+
+
+                        <th>
+
+                            Air Quality Score
+
+                        </th>
+
+
+                        <th>
+
+                            Status
+
+                        </th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+                <tbody id="historyTableBody">
+
+
+                    <!-- History data is inserted by history.js -->
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================
+                FOOTER
+    ================================== -->
+
+    <footer class="history-footer">
+
+
+        <p>
+
+            AQMS • Air Quality Monitoring System
+
+        </p>
+
+
+    </footer>
+
+
+</main>
+
+
+<!-- =================================
+            JAVASCRIPT
+================================== -->
+
+<script src="history.js"></script>
+```
+
+</body>
+
+</html>

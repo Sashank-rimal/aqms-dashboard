@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>AQMS Dashboard</title>
+
+
+<!-- Google Fonts -->
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+<!-- Chart.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- CSS -->
+
+<link rel="stylesheet"
+      href="style.css">
+```
+
+</head>
+
+<body>
+
+```
+<!-- =================================
+        BACKGROUND DECORATION
+================================== -->
+
+<div class="bg-circle circle-one"></div>
+
+<div class="bg-circle circle-two"></div>
+
+
+<!-- =================================
+                HEADER
+================================== -->
+
+<header class="main-header">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+
+        <h1>
+
+            AQMS
+
+        </h1>
+
+
+        <p>
+
+            Air Quality Monitoring System
+
+        </p>
+
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="navigation">
+
+
+        <a href="index.html"
+           class="active">
+
+
+            Dashboard
+
+
+        </a>
+
+
+        <a href="history.html">
+
+
+            History
+
+
+        </a>
+
+
+    </nav>
+
+
+    <!-- LIVE STATUS -->
+
+    <div class="live-status">
+
+
+        <span class="live-dot"></span>
+
+
+        <span>
+
+            LIVE
+
+        </span>
+
+
+    </div>
+
+
+</header>
+
+
+<!-- =================================
+            MAIN DASHBOARD
+================================== -->
+
+<main class="dashboard">
+
+
+    <!-- =================================
+            AIR QUALITY OVERVIEW
+    ================================== -->
+
+    <section class="air-quality-card">
+
+
+        <!-- QUALITY INFORMATION -->
+
+        <div class="quality-information">
+
+
+            <h2>
+
+                Current Air Quality
+
+            </h2>
+
+
+            <h1 id="qualityStatus">
+
+                GOOD
+
+            </h1>
+
+
+            <p id="qualityMessage">
+
+                Environment is Safe
+
+            </p>
+
+
+        </div>
+
+
+        <!-- AIR QUALITY SCORE -->
+
+        <div class="score-section">
+
+
+            <div class="score-ring">
+
+
+                <div class="score-inner">
+
+
+                    <span id="aqScore">
+
+                        92
+
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+            <h3>
+
+                Air Quality Score
+
+            </h3>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================
+            SENSOR CARDS
+    ================================== -->
+
+    <section class="sensor-grid">
+
+
+        <!-- MQ-2 -->
+
+        <div class="sensor-card">
+
+
+            <div class="sensor-icon mq2-icon">
+
+
+                <i class="fa-solid fa-smog"></i>
+
+
+            </div>
+
+
+            <h3>
+
+                MQ-2 Gas Sensor
+
+            </h3>
+
+
+            <div class="sensor-reading">
+
+
+                <span id="mq2Value">
+
+                    425
+
+                </span>
+
+
+                <small>
+
+                    ppm
+
+                </small>
+
+
+            </div>
+
+
+            <span class="status-badge safe">
+
+
+                SAFE
+
+
+            </span>
+
+
+        </div>
+
+
+        <!-- MQ-135 -->
+
+        <div class="sensor-card">
+
+
+            <div class="sensor-icon mq135-icon">
+
+
+                <i class="fa-solid fa-wind"></i>
+
+
+            </div>
+
+
+            <h3>
+
+                MQ-135 Air Sensor
+
+            </h3>
+
+
+            <div class="sensor-reading">
+
+
+                <span id="mq135Value">
+
+                    180
+
+                </span>
+
+
+                <small>
+
+                    ppm
+
+                </small>
+
+
+            </div>
+
+
+            <span id="mq135Status"
+                  class="status-badge good">
+
+
+                GOOD
+
+
+            </span>
+
+
+        </div>
+
+
+        <!-- TEMPERATURE -->
+
+        <div class="sensor-card">
+
+
+            <div class="sensor-icon temperature-icon">
+
+
+                <i class="fa-solid fa-temperature-half"></i>
+
+
+            </div>
+
+
+            <h3>
+
+                Temperature
+
+            </h3>
+
+
+            <div class="sensor-reading">
+
+
+                <span id="temperatureValue">
+
+                    29
+
+                </span>
+
+
+                <small>
+
+                    °C
+
+                </small>
+
+
+            </div>
+
+
+            <span class="status-badge normal">
+
+
+                NORMAL
+
+
+            </span>
+
+
+        </div>
+
+
+        <!-- HUMIDITY -->
+
+        <div class="sensor-card">
+
+
+            <div class="sensor-icon humidity-icon">
+
+
+                <i class="fa-solid fa-droplet"></i>
+
+
+            </div>
+
+
+            <h3>
+
+                Humidity
+
+            </h3>
+
+
+            <div class="sensor-reading">
+
+
+                <span id="humidityValue">
+
+                    62
+
+                </span>
+
+
+                <small>
+
+                    %
+
+                </small>
+
+
+            </div>
+
+
+            <span class="status-badge normal">
+
+
+                NORMAL
+
+
+            </span>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================
+            CHART SECTION
+    ================================== -->
+
+    <section class="charts-grid">
+
+
+        <!-- MQ-2 SMOKE TREND -->
+
+        <div class="chart-card">
+
+
+            <div class="chart-heading">
+
+
+                <h2>
+
+                    Smoke Level Trend
+
+                </h2>
+
+
+            </div>
+
+
+            <div class="chart-wrapper">
+
+
+                <canvas id="smokeChart"></canvas>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- TEMPERATURE & HUMIDITY TREND -->
+
+        <div class="chart-card">
+
+
+            <div class="chart-heading">
+
+
+                <h2>
+
+                    Temperature & Humidity
+
+                </h2>
+
+
+            </div>
+
+
+            <div class="chart-wrapper">
+
+
+                <canvas id="environmentChart"></canvas>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================
+            LAST READING
+    ================================== -->
+
+    <footer class="dashboard-footer">
+
+
+        <p>
+
+            Last Reading
+
+        </p>
+
+
+        <span id="lastUpdated">
+
+
+            16 Jul 2026 | 17:30:25
+
+
+        </span>
+
+
+    </footer>
+
+
+</main>
+
+
+<!-- =================================
+            JAVASCRIPT
+================================== -->
+
+<script src="script.js"></script>
+```
+
+</body>
+
+</html>

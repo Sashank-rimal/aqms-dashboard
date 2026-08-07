@@ -1,0 +1,1081 @@
+/* =================================================
+                    ROOT VARIABLES
+================================================= */
+
+:root {
+
+    --background: #F7F6F3;
+
+    --card: #FFFFFF;
+
+    --primary: #355CFF;
+
+    --text: #172033;
+
+    --secondary-text: #667085;
+
+    --border: #E8E9ED;
+
+    --success: #22C55E;
+
+    --success-light: #DCFCE7;
+
+    --warning: #F59E0B;
+
+    --warning-light: #FEF3C7;
+
+    --danger: #EF4444;
+
+    --danger-light: #FEE2E2;
+
+    --normal-light: #DBEAFE;
+
+    --normal-text: #1D4ED8;
+
+}
+
+
+/* =================================================
+                    RESET
+================================================= */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family: 'Inter', sans-serif;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+}
+
+
+/* =================================================
+            BACKGROUND DECORATION
+================================================= */
+
+.bg-circle {
+
+    position: fixed;
+
+    border-radius: 50%;
+
+    filter: blur(120px);
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    opacity: 0.35;
+
+}
+
+
+.circle-one {
+
+    width: 360px;
+
+    height: 360px;
+
+    background: #DCE5FF;
+
+    top: -160px;
+
+    right: -120px;
+
+}
+
+
+.circle-two {
+
+    width: 320px;
+
+    height: 320px;
+
+    background: #E9E5FF;
+
+    bottom: -150px;
+
+    left: -130px;
+
+}
+
+
+/* =================================================
+                    HEADER
+================================================= */
+
+.main-header {
+
+    width: 92%;
+
+    max-width: 1280px;
+
+    margin: 38px auto 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+}
+
+
+/* =================================================
+                    BRAND
+================================================= */
+
+.brand h1 {
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    letter-spacing: -1px;
+
+    color: var(--primary);
+
+}
+
+
+.brand p {
+
+    margin-top: 5px;
+
+    color: var(--secondary-text);
+
+    font-size: 14px;
+
+}
+
+
+/* =================================================
+                NAVIGATION
+================================================= */
+
+.navigation {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 34px;
+
+}
+
+
+.navigation a {
+
+    position: relative;
+
+    color: var(--secondary-text);
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition: color 0.25s ease;
+
+}
+
+
+.navigation a:hover {
+
+    color: var(--primary);
+
+}
+
+
+.navigation a.active {
+
+    color: var(--primary);
+
+}
+
+
+.navigation a.active::after {
+
+    content: '';
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: -10px;
+
+    height: 3px;
+
+    border-radius: 10px;
+
+    background: var(--primary);
+
+}
+
+
+/* =================================================
+                LIVE STATUS
+================================================= */
+
+.live-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 11px 18px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    background: var(--card);
+
+    color: var(--secondary-text);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+
+    box-shadow: 0 8px 24px rgba(23, 32, 51, 0.04);
+
+}
+
+
+.live-dot {
+
+    width: 9px;
+
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: var(--success);
+
+    animation: livePulse 1.6s infinite;
+
+}
+
+
+@keyframes livePulse {
+
+    0% {
+
+        transform: scale(1);
+
+        opacity: 1;
+
+    }
+
+    50% {
+
+        transform: scale(1.45);
+
+        opacity: 0.55;
+
+    }
+
+    100% {
+
+        transform: scale(1);
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* =================================================
+                MAIN DASHBOARD
+================================================= */
+
+.dashboard {
+
+    width: 92%;
+
+    max-width: 1280px;
+
+    margin: 0 auto;
+
+    padding-bottom: 55px;
+
+}
+
+
+/* =================================================
+            AIR QUALITY OVERVIEW
+================================================= */
+
+.air-quality-card {
+
+    min-height: 310px;
+
+    padding: 48px 58px;
+
+    margin-bottom: 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border: 1px solid var(--border);
+
+    border-radius: 30px;
+
+    background: var(--card);
+
+    box-shadow: 0 12px 34px rgba(23, 32, 51, 0.055);
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+
+.air-quality-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 18px 42px rgba(23, 32, 51, 0.09);
+
+}
+
+
+/* =================================================
+            QUALITY INFORMATION
+================================================= */
+
+.quality-information h2 {
+
+    margin-bottom: 22px;
+
+    color: var(--secondary-text);
+
+    font-size: 19px;
+
+    font-weight: 600;
+
+}
+
+
+.quality-information h1 {
+
+    margin-bottom: 16px;
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: 76px;
+
+    line-height: 0.95;
+
+    font-weight: 700;
+
+    letter-spacing: -2px;
+
+    color: var(--success);
+
+}
+
+
+.quality-information h1.good {
+
+    color: var(--success);
+
+}
+
+
+.quality-information h1.moderate {
+
+    color: var(--warning);
+
+}
+
+
+.quality-information h1.poor {
+
+    color: var(--danger);
+
+}
+
+
+.quality-information p {
+
+    color: var(--secondary-text);
+
+    font-size: 18px;
+
+}
+
+
+/* =================================================
+                SCORE SECTION
+================================================= */
+
+.score-section {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+}
+
+
+.score-ring {
+
+    width: 188px;
+
+    height: 188px;
+
+    margin-bottom: 18px;
+
+    padding: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: conic-gradient(
+
+        var(--primary) 0deg 331deg,
+
+        #E9ECF5 331deg 360deg
+
+    );
+
+}
+
+
+.score-inner {
+
+    width: 148px;
+
+    height: 148px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--card);
+
+}
+
+
+.score-inner span {
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: 58px;
+
+    font-weight: 700;
+
+    color: var(--primary);
+
+}
+
+
+.score-section h3 {
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+/* =================================================
+                SENSOR GRID
+================================================= */
+
+.sensor-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 22px;
+
+    margin-bottom: 28px;
+
+}
+
+
+/* =================================================
+                SENSOR CARD
+================================================= */
+
+.sensor-card {
+
+    min-height: 285px;
+
+    padding: 28px 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    border: 1px solid var(--border);
+
+    border-radius: 25px;
+
+    background: var(--card);
+
+    box-shadow: 0 9px 26px rgba(23, 32, 51, 0.045);
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+
+.sensor-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 16px 34px rgba(23, 32, 51, 0.085);
+
+}
+
+
+/* =================================================
+                SENSOR ICON
+================================================= */
+
+.sensor-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    margin-bottom: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+}
+
+
+.sensor-icon i {
+
+    font-size: 27px;
+
+}
+
+
+.mq2-icon {
+
+    background: #FFF0E8;
+
+    color: #E66A25;
+
+}
+
+
+.mq135-icon {
+
+    background: #E9F7F0;
+
+    color: #1E9B62;
+
+}
+
+
+.temperature-icon {
+
+    background: #FFF0F0;
+
+    color: #E45757;
+
+}
+
+
+.humidity-icon {
+
+    background: #EAF2FF;
+
+    color: #3B73D1;
+
+}
+
+
+/* =================================================
+                SENSOR TITLE
+================================================= */
+
+.sensor-card h3 {
+
+    min-height: 24px;
+
+    margin-bottom: 18px;
+
+    color: var(--secondary-text);
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+}
+
+
+/* =================================================
+                SENSOR READING
+================================================= */
+
+.sensor-reading {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 7px;
+
+    margin-bottom: 21px;
+
+}
+
+
+.sensor-reading span {
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: 48px;
+
+    line-height: 1;
+
+    font-weight: 700;
+
+    color: var(--text);
+
+}
+
+
+.sensor-reading small {
+
+    color: var(--secondary-text);
+
+    font-size: 14px;
+
+}
+
+
+/* =================================================
+                STATUS BADGES
+================================================= */
+
+.status-badge {
+
+    padding: 9px 17px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.7px;
+
+}
+
+
+.status-badge.safe,
+
+.status-badge.good {
+
+    background: var(--success-light);
+
+    color: #15803D;
+
+}
+
+
+.status-badge.normal {
+
+    background: var(--normal-light);
+
+    color: var(--normal-text);
+
+}
+
+
+.status-badge.moderate {
+
+    background: var(--warning-light);
+
+    color: #B45309;
+
+}
+
+
+.status-badge.poor {
+
+    background: var(--danger-light);
+
+    color: #B91C1C;
+
+}
+
+
+/* =================================================
+                CHARTS GRID
+================================================= */
+
+.charts-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 22px;
+
+    margin-bottom: 28px;
+
+}
+
+
+/* =================================================
+                CHART CARD
+================================================= */
+
+.chart-card {
+
+    min-width: 0;
+
+    padding: 28px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 28px;
+
+    background: var(--card);
+
+    box-shadow: 0 9px 26px rgba(23, 32, 51, 0.045);
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+
+.chart-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 16px 34px rgba(23, 32, 51, 0.08);
+
+}
+
+
+/* =================================================
+                CHART HEADING
+================================================= */
+
+.chart-heading {
+
+    margin-bottom: 20px;
+
+}
+
+
+.chart-heading h2 {
+
+    margin-bottom: 7px;
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+}
+
+
+.chart-heading p {
+
+    color: var(--secondary-text);
+
+    font-size: 13px;
+
+}
+
+
+/* =================================================
+                COMPACT CHART
+================================================= */
+
+.chart-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 230px;
+
+}
+
+
+.chart-wrapper canvas {
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+}
+
+
+/* =================================================
+                DASHBOARD FOOTER
+================================================= */
+
+.dashboard-footer {
+
+    padding: 22px 0;
+
+    text-align: center;
+
+}
+
+
+.dashboard-footer p {
+
+    margin-bottom: 7px;
+
+    color: var(--secondary-text);
+
+    font-size: 14px;
+
+}
+
+
+.dashboard-footer span {
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    color: var(--text);
+
+}
+
+
+/* =================================================
+                RESPONSIVE DESIGN
+================================================= */
+
+@media (max-width: 1050px) {
+
+
+    .sensor-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+
+}
+
+
+@media (max-width: 850px) {
+
+
+    .charts-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+}
+
+
+@media (max-width: 768px) {
+
+
+    .main-header {
+
+        flex-direction: column;
+
+        margin-top: 28px;
+
+        margin-bottom: 35px;
+
+    }
+
+
+    .brand {
+
+        text-align: center;
+
+    }
+
+
+    .navigation {
+
+        order: 3;
+
+    }
+
+
+    .air-quality-card {
+
+        padding: 38px 28px;
+
+        flex-direction: column;
+
+        gap: 42px;
+
+        text-align: center;
+
+    }
+
+
+    .quality-information h1 {
+
+        font-size: 62px;
+
+    }
+
+
+    .sensor-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+}
+
+
+@media (max-width: 480px) {
+
+
+    .brand h1 {
+
+        font-size: 36px;
+
+    }
+
+
+    .brand p {
+
+        font-size: 13px;
+
+    }
+
+
+    .navigation {
+
+        gap: 22px;
+
+    }
+
+
+    .live-status {
+
+        padding: 9px 15px;
+
+    }
+
+
+    .quality-information h1 {
+
+        font-size: 52px;
+
+    }
+
+
+    .score-ring {
+
+        width: 165px;
+
+        height: 165px;
+
+    }
+
+
+    .score-inner {
+
+        width: 130px;
+
+        height: 130px;
+
+    }
+
+
+    .score-inner span {
+
+        font-size: 48px;
+
+    }
+
+
+    .chart-card {
+
+        padding: 22px 16px;
+
+    }
+
+
+    .chart-wrapper {
+
+        height: 210px;
+
+    }
+
+
+}
