@@ -4,8 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
             API CONFIGURATION
     ================================= */
     // Replace with your actual Vercel deployment URL
-    const API_URL = "https://aqms-dashboard-w49a.vercel.app/api/live-data";
-
+const API_URL = "https://aqms-dashboard-orpin.vercel.app/api/live-data";
     /* =================================
             CALIBRATION CONSTANTS
     ================================= */
