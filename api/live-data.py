@@ -78,7 +78,7 @@ def mq135_adc_to_ppm(raw_adc):
     if raw_adc <= 0:
         return 0.0
     if raw_adc >= 4090:
-        return 1000.0
+        return 1000.0  # Max cap
     
     voltage = (raw_adc / 4095.0) * 3.3
     if voltage <= 0.05:
@@ -86,12 +86,11 @@ def mq135_adc_to_ppm(raw_adc):
     if voltage >= 3.25:
         return 1000.0
     
-    # Calculate sensor resistance
+    # R_L = 1.0 (1 kΩ)
     rs = ((3.3 - voltage) / voltage) * 1.0
     
-    # Run a fresh air test to find your exact custom R0. 
-    # Adjusted R0 to properly target a ~400 PPM baseline at normal ambient ranges.
-    r0 = 20
+    # Custom R_0 = 20.0 baseline
+    r0 = 20.0  
     ratio = rs / r0
     
     if ratio <= 0.05:
@@ -100,29 +99,31 @@ def mq135_adc_to_ppm(raw_adc):
     ppm = 110.47 * (ratio ** -2.862)
     return round(max(0.0, min(ppm, 1000.0)), 1)
 
+
 def mq2_adc_to_ppm(raw_adc):
     if raw_adc <= 0:
         return 0.0
     if raw_adc >= 4090:
-        return 10000.0
+        return 1000.0  # Max cap set to 1000 PPM safety ceiling
         
     voltage = (raw_adc / 4095.0) * 3.3
     if voltage <= 0.05:
         return 0.0
     if voltage >= 3.25:
-        return 10000.0
+        return 1000.0
         
+    # R_L = 20.0 (20 kΩ)
     rs = ((3.3 - voltage) / voltage) * 20.0
     
-    # Adjusted R0 baseline for MQ-2 matching common 10k load breakout behaviors
-    r0 = 12.5
+    # Custom R_0 = 12.5 baseline
+    r0 = 12.5  
     ratio = rs / r0
     
     if ratio <= 0.01:
-        return 10000.0
+        return 1000.0
         
     ppm = 613.9 * (ratio ** -2.074)
-    return round(max(0.0, min(ppm, 10000.0)), 1)
+    return round(max(0.0, min(ppm, 1000.0)), 1)
 
 
 # --- Score & Status Calculation ---
