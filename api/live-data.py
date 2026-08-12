@@ -87,11 +87,11 @@ def mq135_adc_to_ppm(raw_adc):
         return 1000.0
     
     # Calculate sensor resistance
-    rs = ((3.3 - voltage) / voltage) * 10.0
+    rs = ((3.3 - voltage) / voltage) * 1.0
     
     # Run a fresh air test to find your exact custom R0. 
     # Adjusted R0 to properly target a ~400 PPM baseline at normal ambient ranges.
-    r0 = 36.0
+    r0 = 20
     ratio = rs / r0
     
     if ratio <= 0.05:
@@ -112,10 +112,10 @@ def mq2_adc_to_ppm(raw_adc):
     if voltage >= 3.25:
         return 10000.0
         
-    rs = ((3.3 - voltage) / voltage) * 10.0
+    rs = ((3.3 - voltage) / voltage) * 20.0
     
     # Adjusted R0 baseline for MQ-2 matching common 10k load breakout behaviors
-    r0 = 10.0
+    r0 = 12.5
     ratio = rs / r0
     
     if ratio <= 0.01:
