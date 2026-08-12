@@ -81,19 +81,14 @@ def mq135_adc_to_ppm(raw_adc):
         return 1000.0  # Max cap
     
     voltage = (raw_adc / 4095.0) * 3.3
-    
-    # Lowered the voltage floor check from 0.05 to 0.01 
-    # so low voltage from the 1k load resistor doesn't force 0 ppm
-    if voltage <= 0.01:
-        return 0.0
     if voltage >= 3.25:
         return 1000.0
     
-    # R_L = 1.0 (1 kΩ)
-    rs = ((3.3 - voltage) / voltage) * 1.0
+    # REMOVED the "if voltage <= 0.01:" check entirely!
+    # This forces the 1k load resistor circuit to calculate a PPM value no matter how low the voltage drops.
     
-    # Custom R_0 = 20.0 baseline
-    r0 = 20.0  
+    rs = ((3.3 - voltage) / voltage) * 1.0  # R_L = 1.0 (1 kΩ)
+    r0 = 20.0  # Custom R_0 baseline
     ratio = rs / r0
     
     if ratio <= 0.05:
