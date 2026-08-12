@@ -70,38 +70,74 @@ def safe_int(val, default=0):
         return default
 
 
-# --- NEW: ADC to PPM Conversion Functions ---
+# --- ADC to PPM Conversion Functions with Safety Guardrails ---
 def mq135_adc_to_ppm(raw_adc):
-    if raw_adc <= 0:
-        return 0
-    # 1. Convert 12-bit ADC (0-4095) to Voltage (3.3V)
-    voltage = (raw_adc / 4095.0) * 3.3
-    if voltage <= 0.1:
-        return 0
+    if raw_adc <= 0 or raw_adc >= 4090:
+        return 0.0
     
-    # 2. Estimate Sensor Resistance (Rs) assuming 10k Load Resistor
+    voltage = (raw_adc / 4095.0) * 3.3
+    # Prevent divide-by-zero or Rs near zero blowup
+    if voltage <= 0.1 or voltage >= 3.25:
+        return 0.0
+    
     rs = ((3.3 - voltage) / voltage) * 10.0
-    r0 = 10.0  # Clean air baseline resistance estimate
+    r0 = 10.0  # Clean air baseline
     ratio = rs / r0
     
-    # 3. Apply standard power-law PPM curve formula for CO2/Air pollutants
+    if ratio <= 0.05:
+        return 1000.0  # Sensor saturated threshold
+        
     ppm = 110.47 * (ratio ** -2.862)
-    return round(ppm, 1)
+    # Cap at 1000 PPM max datasheet limit
+    return round(min(ppm, 1000.0), 1)
 
 def mq2_adc_to_ppm(raw_adc):
-    if raw_adc <= 0:
-        return 0
+    if raw_adc <= 0 or raw_adc >= 4090:
+        return 0.0
+        
     voltage = (raw_adc / 4095.0) * 3.3
-    if voltage <= 0.1:
-        return 0
+    if voltage <= 0.1 or voltage >= 3.25:
+        return 0.0
+        
     rs = ((3.3 - voltage) / voltage) * 10.0
     r0 = 10.0
     ratio = rs / r0
     
-    # MQ-2 Smoke/Combustible gas curve formula
+    if ratio <= 0.01:
+        return 10000.0  # Sensor saturated threshold
+        
     ppm = 613.9 * (ratio ** -2.074)
-    return round(ppm, 1)
-# --------------------------------------------
+    # Cap at 10000 PPM max datasheet limit
+    return round(min(ppm, 10000.0), 1)
+# --------------------------------------------------------------
+
+
+# --- NEW: Real-World Air Quality Score & Status Calculation ---
+def calculate_air_quality(mq2_ppm, mq135_ppm):
+    """
+    Calculates a 0-100 score and assigns a status based on practical 
+    sensor limits (MQ-135 Max: 1000 PPM | MQ-2 Max: 10000 PPM).
+    """
+    # Calculate severity percentages based on maximum sensor limits
+    mq135_severity = min((mq135_ppm / 1000.0) * 100.0, 100.0)
+    mq2_severity = min((mq2_ppm / 10000.0) * 100.0, 100.0)
+    
+    # Calculate weighted score (60% MQ-135, 40% MQ-2)
+    calculated_score = int(100 - ((0.6 * mq135_severity) + (0.4 * mq2_severity)))
+    
+    # Ensure score stays strictly within 0 to 100
+    score = max(0, min(100, calculated_score))
+    
+    # Assign Status based on the final calculated score
+    if score >= 80:
+        status = "GOOD"
+    elif score >= 50:
+        status = "MODERATE"
+    else:
+        status = "POOR"
+        
+    return score, status
+# --------------------------------------------------------------
 
 
 class handler(BaseHTTPRequestHandler):
@@ -140,24 +176,26 @@ class handler(BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             data = json.loads(post_data.decode("utf-8"))
 
-            # --- NEW: Process raw values through the PPM converters ---
             raw_mq2 = safe_int(data.get("mq2", 0))
             raw_mq135 = safe_int(data.get("mq135", 0))
 
             mq2_ppm = mq2_adc_to_ppm(raw_mq2)
             mq135_ppm = mq135_adc_to_ppm(raw_mq135)
 
+            # --- Calculate backend Score and Status ---
+            score, status = calculate_air_quality(mq2_ppm, mq135_ppm)
+
             row = [
                 data.get("date", ""),
                 data.get("time", ""),
-                mq2_ppm,         # Log converted PPM
-                mq135_ppm,       # Log converted PPM
+                mq2_ppm,         
+                mq135_ppm,       
                 data.get("temperature", 0),
                 data.get("humidity", 0),
-                data.get("score", 0),
-                data.get("status", "Good"),
+                score,           # Insert backend-calculated Score
+                status,          # Insert backend-calculated Status
             ]
-            # ----------------------------------------------------------
+            # ------------------------------------------
 
             service = get_sheets_service()
             service.values().append(
@@ -208,8 +246,8 @@ class handler(BaseHTTPRequestHandler):
                     history_list.append({
                         "date":        raw.get("date", ""),
                         "time":        raw.get("time", ""),
-                        "mq2":         safe_int(raw.get("mq2", 0)),
-                        "mq135":       safe_int(raw.get("mq135", 0)),
+                        "mq2":         safe_float(raw.get("mq2", 0)),
+                        "mq135":       safe_float(raw.get("mq135", 0)),
                         "temperature": safe_float(raw.get("temperature", 0)),
                         "humidity":    safe_float(raw.get("humidity", 0)),
                         "score":       safe_int(raw.get("score", 0)),
@@ -225,8 +263,8 @@ class handler(BaseHTTPRequestHandler):
                 self._send_json_response(200, {
                     "date":        raw.get("date", ""),
                     "time":        raw.get("time", ""),
-                    "mq2":         safe_int(raw.get("mq2", 0)),
-                    "mq135":       safe_int(raw.get("mq135", 0)),
+                    "mq2":         safe_float(raw.get("mq2", 0)),
+                    "mq135":       safe_float(raw.get("mq135", 0)),
                     "temperature": safe_float(raw.get("temperature", 0)),
                     "humidity":    safe_float(raw.get("humidity", 0)),
                     "score":       safe_int(raw.get("score", 0)),
