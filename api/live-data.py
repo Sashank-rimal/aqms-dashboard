@@ -306,3 +306,4 @@ class handler(BaseHTTPRequestHandler):
         except Exception as e:
             # Catch and return any errors to the frontend
             self._send_json_response(500, {"status": "error", "message": str(e)})
+        # it must work properly
