@@ -181,31 +181,33 @@ class handler(BaseHTTPRequestHandler):
                 self._send_json_response(400, {"status": "error", "message": "Empty request body"})
                 return
 
-            # Read the raw byte data and decode it into a Python Dictionary
+            # 1. Parse incoming JSON body sent by ESP32
             post_data = self.rfile.read(content_length)
             data = json.loads(post_data.decode("utf-8"))
 
-            # Safely extract the raw ADC values sent by the ESP32
-            raw_mq2 = safe_int(data.get("mq2", 0))
-            raw_mq135 = safe_int(data.get("mq135", 0))
+            # Extract raw ADC values sent in JSON ("mq2" and "mq135")
+            mq2_value = safe_int(data.get("mq2", 0))       # Corresponds to mq2Value from ESP32
+            mq135_value = safe_int(data.get("mq135", 0))   # Corresponds to mq135Value from ESP32
+            temp = safe_float(data.get("temperature", 0.0))
+            hum = safe_float(data.get("humidity", 0.0))
 
-            # Convert those raw ADC values into actual PPM using our functions
-            mq2_ppm = mq2_adc_to_ppm(raw_mq2)
-            mq135_ppm = mq135_adc_to_ppm(raw_mq135)
+            # 2. Convert the raw ADC integers to physical PPM using your updated hardware equations
+            mq2_ppm = mq2_adc_to_ppm(mq2_value)
+            mq135_ppm = mq135_adc_to_ppm(mq135_value)
 
-            # Calculate the overall score and status using the PPM values
+            # 3. Compute accurate Air Quality Score and Status on the server
             score, status = calculate_air_quality(mq2_ppm, mq135_ppm)
 
-            # Build an array representing a single row in Google Sheets
+            # 4. Save to Google Sheets
             row = [
-                data.get("date", ""),       # Column A
-                data.get("time", ""),       # Column B
-                mq2_ppm,                    # Column C (Computed PPM)
-                mq135_ppm,                  # Column D (Computed PPM)
-                data.get("temperature", 0), # Column E
-                data.get("humidity", 0),    # Column F
-                score,                      # Column G (Computed Score)
-                status,                     # Column H (Computed Status)
+                data.get("date", ""), # Column A
+                data.get("time", ""), # Column B
+                mq2_ppm,               # Column C (Computed PPM)
+                mq135_ppm,             # Column D (Computed PPM)
+                temp,                  # Column E
+                hum,                   # Column F
+                score,                 # Column G (Computed Score)
+                status,                # Column H (Computed Status)
             ]
 
             # Connect to Google Sheets and append the new row to the bottom
@@ -301,4 +303,3 @@ class handler(BaseHTTPRequestHandler):
         except Exception as e:
             # Catch and return any errors to the frontend
             self._send_json_response(500, {"status": "error", "message": str(e)})
-        # it must work properly
