@@ -1,6 +1,7 @@
 import json
 import os
 import base64
+import math
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import parse_qs, urlparse
 from google.oauth2.service_account import Credentials
@@ -69,6 +70,40 @@ def safe_int(val, default=0):
         return default
 
 
+# --- NEW: ADC to PPM Conversion Functions ---
+def mq135_adc_to_ppm(raw_adc):
+    if raw_adc <= 0:
+        return 0
+    # 1. Convert 12-bit ADC (0-4095) to Voltage (3.3V)
+    voltage = (raw_adc / 4095.0) * 3.3
+    if voltage <= 0.1:
+        return 0
+    
+    # 2. Estimate Sensor Resistance (Rs) assuming 10k Load Resistor
+    rs = ((3.3 - voltage) / voltage) * 10.0
+    r0 = 10.0  # Clean air baseline resistance estimate
+    ratio = rs / r0
+    
+    # 3. Apply standard power-law PPM curve formula for CO2/Air pollutants
+    ppm = 110.47 * (ratio ** -2.862)
+    return round(ppm, 1)
+
+def mq2_adc_to_ppm(raw_adc):
+    if raw_adc <= 0:
+        return 0
+    voltage = (raw_adc / 4095.0) * 3.3
+    if voltage <= 0.1:
+        return 0
+    rs = ((3.3 - voltage) / voltage) * 10.0
+    r0 = 10.0
+    ratio = rs / r0
+    
+    # MQ-2 Smoke/Combustible gas curve formula
+    ppm = 613.9 * (ratio ** -2.074)
+    return round(ppm, 1)
+# --------------------------------------------
+
+
 class handler(BaseHTTPRequestHandler):
 
     def log_message(self, format, *args):
@@ -105,16 +140,24 @@ class handler(BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             data = json.loads(post_data.decode("utf-8"))
 
+            # --- NEW: Process raw values through the PPM converters ---
+            raw_mq2 = safe_int(data.get("mq2", 0))
+            raw_mq135 = safe_int(data.get("mq135", 0))
+
+            mq2_ppm = mq2_adc_to_ppm(raw_mq2)
+            mq135_ppm = mq135_adc_to_ppm(raw_mq135)
+
             row = [
                 data.get("date", ""),
                 data.get("time", ""),
-                data.get("mq2", 0),
-                data.get("mq135", 0),
+                mq2_ppm,         # Log converted PPM
+                mq135_ppm,       # Log converted PPM
                 data.get("temperature", 0),
                 data.get("humidity", 0),
                 data.get("score", 0),
                 data.get("status", "Good"),
             ]
+            # ----------------------------------------------------------
 
             service = get_sheets_service()
             service.values().append(
