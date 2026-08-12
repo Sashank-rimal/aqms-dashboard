@@ -91,7 +91,7 @@ def mq135_adc_to_ppm(raw_adc):
     
     # Run a fresh air test to find your exact custom R0. 
     # Adjusted R0 to properly target a ~400 PPM baseline at normal ambient ranges.
-    r0 = 5.2  
+    r0 = 36.0
     ratio = rs / r0
     
     if ratio <= 0.05:
@@ -115,7 +115,7 @@ def mq2_adc_to_ppm(raw_adc):
     rs = ((3.3 - voltage) / voltage) * 10.0
     
     # Adjusted R0 baseline for MQ-2 matching common 10k load breakout behaviors
-    r0 = 1.8  
+    r0 = 10.0
     ratio = rs / r0
     
     if ratio <= 0.01:
