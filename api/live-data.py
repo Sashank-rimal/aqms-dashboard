@@ -73,11 +73,12 @@ def safe_int(val, default=0):
 
 
 # --- ADC to PPM Conversion Functions ---
+# --- ADC to PPM Conversion Functions ---
 def mq135_adc_to_ppm(raw_adc):
     if raw_adc <= 0:
         return 0.0
     if raw_adc >= 4090:
-        return 1000.0  # Max datasheet cap
+        return 1000.0
     
     voltage = (raw_adc / 4095.0) * 3.3
     if voltage <= 0.05:
@@ -88,57 +89,51 @@ def mq135_adc_to_ppm(raw_adc):
     # Calculate sensor resistance
     rs = ((3.3 - voltage) / voltage) * 10.0
     
-    # Calibrated R0 for clean room air (~400 PPM baseline)
-    # If raw_adc = 400 (~0.32V), Rs ~ 92.5k. Setting R0 ~ 36.0k brings base PPM to ~400
-    r0 = 36.0  
+    # Run a fresh air test to find your exact custom R0. 
+    # Adjusted R0 to properly target a ~400 PPM baseline at normal ambient ranges.
+    r0 = 5.2  
     ratio = rs / r0
     
     if ratio <= 0.05:
         return 1000.0
         
     ppm = 110.47 * (ratio ** -2.862)
-    
-    # Cap between 0 and 1000 PPM
     return round(max(0.0, min(ppm, 1000.0)), 1)
 
 def mq2_adc_to_ppm(raw_adc):
     if raw_adc <= 0:
         return 0.0
     if raw_adc >= 4090:
-        return 10000.0  # Output max PPM instead of 0 when gas/smoke spikes
+        return 10000.0
         
     voltage = (raw_adc / 4095.0) * 3.3
     if voltage <= 0.05:
         return 0.0
     if voltage >= 3.25:
-        return 10000.0  # Output max PPM instead of 0 when voltage spikes
+        return 10000.0
         
     rs = ((3.3 - voltage) / voltage) * 10.0
-    r0 = 10.0  # Standard clean air baseline for MQ-2
+    
+    # Adjusted R0 baseline for MQ-2 matching common 10k load breakout behaviors
+    r0 = 1.8  
     ratio = rs / r0
     
     if ratio <= 0.01:
-        return 10000.0  # Sensor saturated threshold
+        return 10000.0
         
     ppm = 613.9 * (ratio ** -2.074)
-    
-    # Cap strictly between 0.0 and 10000.0 PPM
     return round(max(0.0, min(ppm, 10000.0)), 1)
 
 
 # --- Score & Status Calculation ---
 def calculate_air_quality(mq2_ppm, mq135_ppm):
-    # Calculate how severe the pollution is as a percentage (0 to 100%)
-    mq135_severity = min((mq135_ppm / 1000.0) * 100.0, 100.0)
-    mq2_severity = min((mq2_ppm / 10000.0) * 100.0, 100.0)
+    # Scale severity against realistic operational thresholds rather than maximum limits
+    mq135_severity = min((mq135_ppm / 400.0) * 100.0, 100.0)
+    mq2_severity = min((mq2_ppm / 1000.0) * 100.0, 100.0)
     
-    # Start at 100 (Perfect). Subtract weighted severity (60% MQ135, 40% MQ2)
     calculated_score = int(100 - ((0.6 * mq135_severity) + (0.4 * mq2_severity)))
-    
-    # Clamp the score so it absolutely cannot drop below 0 or go above 100
     score = max(0, min(100, calculated_score))
     
-    # Determine the text status based on the final score
     if score >= 80:
         status = "GOOD"
     elif score >= 50:
@@ -147,6 +142,7 @@ def calculate_air_quality(mq2_ppm, mq135_ppm):
         status = "POOR"
         
     return score, status
+
 
 
 # --- Main HTTP Request Handler ---
