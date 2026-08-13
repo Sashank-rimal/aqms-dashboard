@@ -735,11 +735,10 @@ body {
 .status-badge.safe,
 
 .status-badge.good {
-
     background: var(--danger-light);
 
-    color: var(#B91C1C);
-
+    color: #B91C1C;
+    
 }
 
 
