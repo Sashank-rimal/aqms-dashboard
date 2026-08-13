@@ -736,9 +736,9 @@ body {
 
 .status-badge.good {
 
-    background: var(--success-light);
+    background: var(--danger-light);
 
-    color: #80151e;
+    color: var(#B91C1C);
 
 }
 
